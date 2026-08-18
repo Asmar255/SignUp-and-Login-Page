@@ -1,4 +1,4 @@
-import { StyleSheet,Text, View, TextInput } from 'react-native'
+import { StyleSheet,Text, View, TextInput, Pressable, Alert } from 'react-native'
 import React, { Component } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -17,6 +17,25 @@ export class Login extends Component {
               placeholder="hello@example.com"
               placeholderTextColor="#888"
             />
+            <Text style={styles.default}>Passward</Text>
+            <TextInput
+            style={styles.input}
+            placeholder="Passward"
+            placeholderTextColor="#888"
+            />
+            <Text style={styles.Passward}>Forget Passward?</Text>
+            <Pressable 
+            style={({pressed})=>[
+              styles.loginBtn, pressed && styles.btnpressed
+            ]}
+            >
+              <Text style={styles.btntxt}>Login</Text>
+            </Pressable>
+            <View style={styles.dividerContainer}>
+              <View style={styles.line} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.line} />
+            </View>
         </View>
       </SafeAreaView>
     )
@@ -39,19 +58,58 @@ const styles=StyleSheet.create({
   subTitle:{
     fontSize:18,
     color:'#677795',
+    marginBottom:10,
   },
   default:{
-    color:'#0b0000'
+    color:'#0b0000',
+    fontWeight:'500',
+    paddingTop:5,
   },
   card:{
-    width:'auto',
+    width:'90%',
     backgroundColor: '#FFFFFF',
+    padding:10,
+    borderRadius:10,
   },
   input:{
     borderColor:'#E2E8F0',
     borderRadius:8,
     borderWidth:1,
-    paddingHorizontal:10,
-  }
+    padding:13,
+  },
+  Passward:{
+    color:'#4169E1',
+    fontWeight:'700',
+    marginLeft:'auto',
+    marginTop:3,
+    marginBottom:17,
+  },
+  loginBtn:{
+    backgroundColor:'#1d51ec',
+    borderRadius:8,
+    padding:13,
+  },
+  btnpressed:{
+    opacity:0.7,
+  },
+  btntxt:{
+    color:"#ffff",
+    margin:'auto'
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  line: {
+    flex: 1,                
+    height: 1,
+    backgroundColor: '#E2E8F0',
+  },
+  dividerText: {
+    marginHorizontal: 12,    
+    color: '#888888',
+    fontSize: 14,
+  },
 })
 export default Login
