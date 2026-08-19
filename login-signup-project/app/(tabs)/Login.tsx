@@ -36,6 +36,10 @@ export class Login extends Component {
               <Text style={styles.dividerText}>or</Text>
               <View style={styles.line} />
             </View>
+            <View>
+              <View></View>
+              <View></View>
+            </View>
         </View>
       </SafeAreaView>
     )
