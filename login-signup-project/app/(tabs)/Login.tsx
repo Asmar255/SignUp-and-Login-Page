@@ -64,7 +64,7 @@ export class Login extends Component {
 const styles=StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor:'#d2d7e0',
+    backgroundColor:'#F8FAFC',
     justifyContent: 'center',   
     alignItems: 'center',
   },
@@ -74,6 +74,7 @@ const styles=StyleSheet.create({
   Title:{
     fontSize:27,
     fontWeight:'bold',
+    color:'#3B30E8',
   },
   subTitle:{
     fontSize:18,
