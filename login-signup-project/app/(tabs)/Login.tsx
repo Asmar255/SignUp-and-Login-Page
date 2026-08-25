@@ -1,10 +1,38 @@
 import { StyleSheet,Text, View, TextInput, Pressable, Alert } from 'react-native'
-import React, { Component } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useRouter } from 'expo-router';
+import Feather from '@expo/vector-icons/Feather';
+import { loginUser } from '@/components/auth';
+import { use, useState } from 'react';
 
-export class Login extends Component {
-  render() {
+
+export default function Login(){
+
+   const router=useRouter()
+
+   //hooks
+   const[email,setEmail]=useState('')
+   const[password,setPassword]=useState('')
+   const[isPasswordVisible,setIsPasswordVisible]=useState(false)
+
+  // Login function 
+  const handleLogin=()=>{
+    if(!email.trim() || !password.trim()){
+      Alert.alert('Error', 'Please enter both email and password.')
+      return
+    }
+
+    const result=loginUser(email,password)
+    if(result.success){
+      Alert.alert(`success`, result.message)
+      setEmail('')
+      setPassword('')
+    }
+    else{
+      Alert.alert('Login Failed', result.message)
+    }
+  }
     return (
       <SafeAreaView style={styles.container}>
         {/* main heading */}
@@ -60,7 +88,7 @@ export class Login extends Component {
       </SafeAreaView>
     )
   }
-}
+
 const styles=StyleSheet.create({
   container:{
     flex:1,
@@ -160,4 +188,3 @@ const styles=StyleSheet.create({
     color:'#4169E1',
   }
 })
-export default Login
