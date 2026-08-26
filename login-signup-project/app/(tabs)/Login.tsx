@@ -1,43 +1,37 @@
 import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { useRouter } from 'expo-router';
-import Feather from '@expo/vector-icons/Feather';
-import { loginUser } from '@/components/auth';
-import { useState } from 'react';
-
+import AntDesign from '@expo/vector-icons/AntDesign'
+import { useRouter } from 'expo-router'
+import Feather from '@expo/vector-icons/Feather'
+import { loginUser } from '@/components/auth'
+import { useState } from 'react'
 
 export default function Login() {
-
   const router = useRouter()
 
-  //hooks
+  // hooks
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   // Login function 
   const handleLogin = () => {
-    
     if (!email.trim() || !password.trim()) {
       Alert.alert('Error', 'Please enter both email and password.')
       return
     }
 
     const result = loginUser(email, password)
-    
+
     if (result.success) {
-      Alert.alert(`success`, result.message)
+      Alert.alert('Success', result.message)
       setEmail('')
       setPassword('')
-    }
-    else {
-      
-      console.log('about to show alert')
-Alert.alert('Test', 'This is a test alert')
+    } else {
       Alert.alert('Login Failed', result.message)
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       {/* main heading */}
@@ -45,6 +39,7 @@ Alert.alert('Test', 'This is a test alert')
         <Text style={styles.Title}>Welcome</Text>
         <Text style={styles.subTitle}>Sign in to continue</Text>
       </View>
+
       {/* card section */}
       <View style={styles.card}>
         <Text style={styles.default}>Email</Text>
@@ -56,6 +51,7 @@ Alert.alert('Test', 'This is a test alert')
           onChangeText={setEmail}
           keyboardType="email-address"
         />
+
         <Text style={styles.default}>Password</Text>
         <View style={styles.passwordContainer}>
           <TextInput
@@ -78,22 +74,26 @@ Alert.alert('Test', 'This is a test alert')
             />
           </Pressable>
         </View>
-        <Text style={styles.Passward}>Forget Passward?</Text>
+
+        <Text style={styles.Passward}>Forgot Password?</Text>
+
         <Pressable
           onPress={handleLogin}
           style={({ pressed }) => [
-            styles.loginBtn, pressed && styles.btnpressed
+            styles.loginBtn,
+            pressed && styles.btnpressed,
           ]}
         >
           <Text style={styles.btntxt}>Login</Text>
         </Pressable>
+
         <View style={styles.dividerContainer}>
           <View style={styles.line} />
           <Text style={styles.dividerText}>or</Text>
           <View style={styles.line} />
         </View>
 
-        {/* ggole and apple buttons */}
+        {/* google and apple buttons */}
         <View style={styles.btnflex}>
           <View style={[styles.flex, styles.btnBottom]}>
             <AntDesign name="google" size={24} color="black" />
@@ -105,15 +105,13 @@ Alert.alert('Test', 'This is a test alert')
           </View>
         </View>
       </View>
+
       {/* last line */}
       <View style={styles.flexLast}>
         <Text>Don't have an account?</Text>
-        <Pressable
-          onPress={() => router.push('/SignUp')}
-        >
+        <Pressable onPress={() => router.push('/SignUp')}>
           <Text style={styles.textlast}>Sign up</Text>
         </Pressable>
-
       </View>
     </SafeAreaView>
   )
@@ -143,11 +141,12 @@ const styles = StyleSheet.create({
     color: '#0b0000',
     fontWeight: '500',
     paddingTop: 5,
+    marginBottom: 6,
   },
   card: {
     width: '90%',
     backgroundColor: '#FFFFFF',
-    padding: 10,
+    padding: 16,
     borderRadius: 10,
   },
   input: {
@@ -156,18 +155,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 13,
   },
-  inputPassword: {
+  // Wrapper now holds border and rounded corners
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderColor: '#E2E8F0',
     borderRadius: 8,
     borderWidth: 1,
+  },
+  // Inner input fills free space without its own border
+  inputPassword: {
+    flex: 1,
     padding: 13,
-    flex:1,
+  },
+  eyeIconContainer: {
+    paddingHorizontal: 12,
   },
   Passward: {
     color: '#4169E1',
     fontWeight: '700',
     marginLeft: 'auto',
-    marginTop: 3,
+    marginTop: 6,
     marginBottom: 17,
   },
   loginBtn: {
@@ -179,10 +187,10 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   btntxt: {
-    color: "#ffff",
-    margin: 'auto',
-    fontSize:16,
-    fontWeight:'bold'
+    color: '#ffff',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   dividerContainer: {
     flexDirection: 'row',
@@ -199,38 +207,34 @@ const styles = StyleSheet.create({
     color: '#888888',
     fontSize: 14,
   },
-  //bottom buttons
+  // bottom buttons
   flex: {
     flexDirection: 'row',
     gap: 10,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   btnflex: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 100
+    justifyContent: 'space-between',
+    gap: 12,
   },
   btnBottom: {
     borderColor: '#E2E8F0',
     borderRadius: 10,
-    borderWidth: 2,
-    padding: 8,
+    borderWidth: 1,
+    padding: 12,
+    flex: 1,
+    justifyContent: 'center',
   },
   flexLast: {
     marginTop: 20,
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   textlast: {
     color: '#4169E1',
-  },
-  eyeIconContainer: {
-    paddingHorizontal: 1,
-  },
-  passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center'
+    fontWeight: 'bold',
   },
 })

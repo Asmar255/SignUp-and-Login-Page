@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
+import { Stack } from 'expo-router';
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
@@ -23,6 +23,7 @@ export default function TabLayout() {
         options={{
           title: 'Login',
           tabBarIcon: ({ color }) => <Entypo name="login" size={24} color="black" />,
+          tabBarStyle: { display: 'none' },
         }}
       />
       <Tabs.Screen
@@ -30,8 +31,10 @@ export default function TabLayout() {
         options={{
           title: 'SignUp',
           tabBarIcon: ({ color }) => <AntDesign name="user-add" size={24} color="black" />,
+          tabBarStyle: { display: 'none' },
         }}
       />
     </Tabs>
   );
 }
+
