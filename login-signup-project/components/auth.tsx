@@ -1,59 +1,69 @@
-// type specify 
-export interface User{
-    name:string;
-    email:string;
-    password:string;
+// Type Definition
+export interface User {
+  name: string;
+  email: string;
+  password: string;
 }
 
-//initial data
-export const User_Data: User[]=[
-    { name: 'John Doe', email: 'user@example.com', password: 'password123' },
-    { name: 'Henry Diaz', email: 'hello@example.com', password: 'password123' },
-]
+// Initial Data
+export const User_Data: User[] = [
+  { name: 'John Doe', email: 'user@example.com', password: 'password123' },
+  { name: 'Henry Diaz', email: 'hello@example.com', password: 'password123' },
+];
 
-//login function
-export const loginUser=(email:string,passward:string)=>{
-    const trimmedEmail=email.trim().toLowerCase();
-    const trimmedPassward=passward.trim().toLowerCase();
+// Login Function
+export const loginUser = (email: string, password: string) => {
+  const trimmedEmail = email.trim().toLowerCase();
+  const trimmedPassword = password.trim(); // Do not convert passwords to lowercase
 
-    const findUser=User_Data.find(
-        (user)=>user.email.trim().toLowerCase()=== trimmedEmail &&  user.password.trim().toLocaleLowerCase()===trimmedPassward
-    )
-    if(findUser){
-        return{
-            success:true,
-            message: `Welcome Back, ${findUser.name}!`,
-            user: findUser
-        }
-    }
-    return{
-        success:false,
-        message:`Invalid email or password`
-    }
-}
+  const findUser = User_Data.find(
+    (user) =>
+      user.email.trim().toLowerCase() === trimmedEmail &&
+      user.password.trim() === trimmedPassword
+  );
 
-//Signup function
-export const regUser=(name:string,email:string,password:string)=>{
-    const trimmedName=name.trim()
-    const trimmedPawword=password.trim()
-    const trimmedEmail=email.trim().toLowerCase()
+  if (findUser) {
+    return {
+      success: true,
+      message: `Welcome Back, ${findUser.name}!`,
+      user: findUser,
+    };
+  }
 
-    const userExist=User_Data.find(
-        (user)=>user.email.trim().toLowerCase()===trimmedEmail
-    )
-    if(userExist){
-        return{
-            success:false,
-            message:`User with this email already exists`
-        }
-    }
+  return {
+    success: false,
+    message: 'Invalid email or password',
+  };
+};
 
-    const newUser={name:trimmedName,email:trimmedEmail,password:trimmedPawword}
-    User_Data.push(newUser)
+// Signup Function
+export const regUser = (name: string, email: string, password: string) => {
+  const trimmedName = name.trim();
+  const trimmedPassword = password.trim();
+  const trimmedEmail = email.trim().toLowerCase();
 
-    return{
-        success:true,
-        message:`Account created successfully`,
-        user:newUser
-    }
-}
+  const userExist = User_Data.find(
+    (user) => user.email.trim().toLowerCase() === trimmedEmail
+  );
+
+  if (userExist) {
+    return {
+      success: false,
+      message: 'User with this email already exists',
+    };
+  }
+
+  const newUser: User = {
+    name: trimmedName,
+    email: trimmedEmail,
+    password: trimmedPassword,
+  };
+
+  User_Data.push(newUser);
+
+  return {
+    success: true,
+    message: 'Account created successfully',
+    user: newUser,
+  };
+};
