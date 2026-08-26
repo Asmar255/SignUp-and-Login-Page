@@ -1,17 +1,53 @@
-import { Text, View,StyleSheet,Pressable, TextInput } from 'react-native'
-import React, { Component } from 'react'
+import { Text, View,StyleSheet,Pressable, TextInput, Alert } from 'react-native'
+import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useRouter } from 'expo-router';
+import { regUser } from '@/components/auth';
+import Feather from '@expo/vector-icons/Feather'
 
+export default function SignUp(){
 
-export class SignUp extends Component {
-  render() {
+    const router=useRouter()
+  //States
+  const [name,setName]=useState('')
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
+  const[isPasswordVisible,setIsPasswordVisible]=useState('')
+
+  // Signup function
+  const handleSignUp=()=>{
+    if(!name.trim() || !email.trim() || !password.trim()){
+      Alert.alert('Error','Please fill in all the feilds')
+      return
+    }
+
+    const result=regUser(name,email,password)
+
+    if(result.success){
+      Alert.alert('success',result.message,[
+        {
+          text:'OK',
+          onPress:()=>router.push('/Login') 
+        }
+      ])
+      setName('')
+      setEmail('')
+      setPassword('')
+    }
+    else{
+      Alert.alert('SignUp failed',result.message)
+    }
+  }
+
     return (
       <SafeAreaView style={styles.container}>
 
         {/* header */}
         <View style={styles.flexHeader}>
-          <Pressable style={({pressed})=>pressed && {opacity:0.6}}>
+          <Pressable 
+          onPress={()=>router.back()}
+          style={({pressed})=>pressed && {opacity:0.6}}>
             <AntDesign name="arrow-left" size={27} color="#3B30E8" /></Pressable>
           <Text style={styles.headerText}>Welcome</Text>
           <View style={{ width: 24 }} />
@@ -32,6 +68,8 @@ export class SignUp extends Component {
               style={styles.InputFeilds}
               placeholder='Henry Diaz'
               placeholderTextColor="#888"
+              value={name}
+              onChangeText={setName}
             />
 
             <Text style={styles.InputText}>Email Address</Text>
@@ -39,17 +77,30 @@ export class SignUp extends Component {
               style={styles.InputFeilds}
               placeholder='name@example.com'
               placeholderTextColor="#888"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize='none'
             />
 
-            <Text style={styles.InputText}>Passward</Text>
+            <Text style={styles.InputText}>Password</Text>
             <View style={styles.inputFlex}>
               <TextInput
               style={styles.InputFeilds}
               placeholder='••••••••'
               placeholderTextColor="#888"
+              value={password}
+              onChangeText={setPassword}
+              autoCapitalize='none'
             />
-            <Pressable style={styles.eyeicons}>
-                <AntDesign name="eye" size={24} color="black " />
+            <Pressable
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              style={styles.eyeicons}
+            >
+              <Feather
+                name={isPasswordVisible ? 'eye' : 'eye-off'}
+                size={22}
+                color="#888"
+              />
             </Pressable>
             </View>
           </View>
@@ -57,6 +108,7 @@ export class SignUp extends Component {
           {/* Signup button */}
           <View>
             <Pressable 
+            onPress={handleSignUp}
             style={({pressed})=>[styles.Signupbtn, pressed && {opacity:0.6 } ]}
             >
                 <Text style={styles.textbtn}>Sign Up</Text>
@@ -73,13 +125,17 @@ export class SignUp extends Component {
           {/* Login line */}
           <View style={styles.flexLast}>
             <Text>Already Have a Account.</Text>
-            <Text style={styles.textlast}>Login</Text>
+            <Pressable
+            onPress={()=> router.push('/Login')}
+            >
+              <Text style={styles.textlast}>Login</Text>
+            </Pressable>
           </View>
         </View>
       </SafeAreaView>
     )
   }
-}
+
 const styles=StyleSheet.create({
   container: {
     flex: 1,
@@ -137,12 +193,11 @@ const styles=StyleSheet.create({
       marginBottom:10,
     },
     inputFlex:{
-      flex:1,
       flexDirection:'row',
       alignItems:'center',
     },
     eyeicons:{
-      marginLeft:20,
+      marginLeft:2,
     },
 
     // Signup BUtton
@@ -157,7 +212,8 @@ const styles=StyleSheet.create({
     textbtn:{
       color:'#fff',
       margin:'auto',
-      fontSize:20,
+      fontSize:16,
+      fontWeight:'bold'
     },
 
     // Or Line
@@ -189,4 +245,3 @@ const styles=StyleSheet.create({
       color:'#4169E1',
     }
 })
-export default SignUp

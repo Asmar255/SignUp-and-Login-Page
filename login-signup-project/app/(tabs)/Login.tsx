@@ -180,7 +180,9 @@ const styles = StyleSheet.create({
   },
   btntxt: {
     color: "#ffff",
-    margin: 'auto'
+    margin: 'auto',
+    fontSize:16,
+    fontWeight:'bold'
   },
   dividerContainer: {
     flexDirection: 'row',
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
     color: '#4169E1',
   },
   eyeIconContainer: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 1,
   },
   passwordContainer: {
     flexDirection: 'row',
