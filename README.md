@@ -10,8 +10,6 @@ A responsive, cross-platform authentication UI built with **React Native**, **Ex
 | :---: | :---: | :---: |
 | ![Login Screen](./login-signup-project/assets/images/completed%20Login%20page.png) | ![Sign Up Screen](./login-signup-project/assets/images/completed%20SignUp%20page.png) | 
 
-*(Replace the image paths above with your uploaded screenshot links)*
-
 ---
 
 ## ✨ Features
