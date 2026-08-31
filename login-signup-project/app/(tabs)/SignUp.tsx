@@ -3,8 +3,11 @@ import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
-import { regUser } from '@/components/auth'
 import Feather from '@expo/vector-icons/Feather'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { auth } from '../firebaseConfig'
+
+
 
 export default function SignUp() {
   const router = useRouter()
@@ -21,21 +24,20 @@ export default function SignUp() {
       return
     }
 
-    const result = regUser(name, email, password)
-
-    if (result.success) {
-      Alert.alert('Success', result.message, [
-        {
-          text: 'OK',
-          onPress: () => router.push('/Login'),
-        },
-      ])
+    createUserWithEmailAndPassword(auth,email.trim(),password).then((userCredential)=>{
+      return updateProfile(userCredential.user,{
+        displayName:name.trim()
+      })
+    })
+    .then(()=>{
+      Alert.alert("Sucess",`Account created for ${name}`)
+      setPassword('')
       setName('')
       setEmail('')
-      setPassword('')
-    } else {
-      Alert.alert('SignUp failed', result.message)
-    }
+    })
+    .catch((error)=>{
+      Alert.alert("Sign up Error", error.message)
+    })
   }
 
   return (
