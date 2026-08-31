@@ -3,8 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
-import { loginUser } from '@/components/auth'
 import { useState } from 'react'
+import { auth } from '../firebaseConfig'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+
 
 export default function Login() {
   const router = useRouter()
@@ -21,15 +23,16 @@ export default function Login() {
       return
     }
 
-    const result = loginUser(email, password)
-
-    if (result.success) {
-      Alert.alert('Success', result.message)
+    signInWithEmailAndPassword(auth,email.trim(),password).then((userCredential)=>{
+      const userName=userCredential.user.displayName || userCredential.user.email
+      Alert.alert(`Sucesss`, `Welcome Back, ${userName}`)
       setEmail('')
       setPassword('')
-    } else {
-      Alert.alert('Login Failed', result.message)
-    }
+    })
+    .catch((error)=>{
+      Alert.alert('Login Failed', error.message)
+    })
+    
   }
 
   return (
@@ -50,6 +53,7 @@ export default function Login() {
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
+          autoCapitalize='none'
         />
 
         <Text style={styles.default}>Password</Text>
