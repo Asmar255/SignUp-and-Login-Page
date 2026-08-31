@@ -31,6 +31,8 @@ export default function Login() {
     })
     .catch((error)=>{
       Alert.alert('Login Failed', error.message)
+      setEmail('')
+      setPassword('')
     })
     
   }

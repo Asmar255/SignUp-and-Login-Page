@@ -34,6 +34,7 @@ export default function SignUp() {
       setPassword('')
       setName('')
       setEmail('')
+      router.replace('/Login')
     })
     .catch((error)=>{
       Alert.alert("Sign up Error", error.message)
