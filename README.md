@@ -41,11 +41,11 @@ Ensure you have Node.js installed on your machine along with the [Expo Go](https
 ### Installation & Run
 
 1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/Asmar255/SignUp-and-Login-Page.git](https://github.com/Asmar255/SignUp-and-Login-Page.git)
+   bash
+   git clone https://github.com/Asmar255/SignUp-and-Login-Page.git
    cd login-signup-project
 
-```
+
 
 2. Install dependencies:
 Bash
@@ -55,7 +55,15 @@ npm install
 
 ```
 
-3. Start the development server:
+3. Install Firebase manually (only required for new projects or manual setups): If you are setting up Firebase in a fresh Expo project from scratch, install it using the Expo CLI:
+Bash
+
+```
+npx expo install firebase
+
+```
+
+4. Start the development server:
 Bash
 
 ```
@@ -63,6 +71,22 @@ npx expo start
 
 ```
 
-4. Launch the application:
+5. Launch the application:
    * Scan the QR code in your terminal using Expo Go (Android) or the native Camera app (iOS).
    * Press `a` in the terminal to launch on an active Android Emulator.
+
+📁 Project Structure
+Plaintext
+
+```
+SignUp-and-Login-Page/
+├── app/
+│   └── (tabs)/
+│       ├── _layout.tsx    # Screen layout configurations
+│       ├── index.tsx      # Entry redirect handler
+│       ├── Login.tsx      # Login screen & password input logic
+│       └── SignUp.tsx     # Registration screen layout
+├── components/
+│   └── auth.ts            # Authentication helper logic & mock data
+└── assets/                # App images and screenshot assets
+```
