@@ -1,8 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Stack } from 'expo-router';
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -10,19 +8,20 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? 'dark' : 'light';
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[theme]?.tint ?? '#0a7ea4',
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarButton: (props) => <HapticTab {...props} />,
       }}>
       <Tabs.Screen
         name="Login"
         options={{
           title: 'Login',
-          tabBarIcon: ({ color }) => <Entypo name="login" size={24} color="black" />,
+          tabBarIcon: ({ color }) => <Entypo name="login" size={24} color={color} />,
           tabBarStyle: { display: 'none' },
         }}
       />
@@ -30,11 +29,10 @@ export default function TabLayout() {
         name="SignUp"
         options={{
           title: 'SignUp',
-          tabBarIcon: ({ color }) => <AntDesign name="user-add" size={24} color="black" />,
+          tabBarIcon: ({ color }) => <AntDesign name="user-add" size={24} color={color} />,
           tabBarStyle: { display: 'none' },
         }}
       />
     </Tabs>
   );
 }
-
