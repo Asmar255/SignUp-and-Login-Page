@@ -6,6 +6,7 @@ import Feather from '@expo/vector-icons/Feather'
 import { useState } from 'react'
 import { auth } from '../firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { registerForPushNotificationsAsync, sendPushNotifications } from '../../services/notificationService'
 
 
 export default function Login() {
@@ -15,6 +16,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   // Login function 
   const handleLogin = () => {
