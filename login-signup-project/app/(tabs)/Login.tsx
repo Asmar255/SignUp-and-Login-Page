@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Pressable, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Pressable, Alert, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
@@ -20,6 +20,12 @@ export default function Login() {
 
   // Login function 
   async function handleLogin() {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert('Error', 'Please enter both email and password.')
+      return
+    }
+
+    setLoading(true)
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password)
     const userName = userCredential.user.displayName || userCredential.user.email
@@ -93,7 +99,11 @@ export default function Login() {
             pressed && styles.btnpressed,
           ]}
         >
-          <Text style={styles.btntxt}>Login</Text>
+          {loading?(
+            <ActivityIndicator color="#fff"/>
+          ):
+          ( <Text style={styles.btntxt}>Login</Text>)}
+         
         </Pressable>
 
         <View style={styles.dividerContainer}>

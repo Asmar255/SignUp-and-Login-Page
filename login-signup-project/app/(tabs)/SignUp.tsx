@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable, TextInput, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native'
+import { Text, View, StyleSheet, Pressable, TextInput, Alert, KeyboardAvoidingView, ScrollView, Platform, ActivityIndicator } from 'react-native'
 import { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AntDesign from '@expo/vector-icons/AntDesign'
@@ -6,8 +6,7 @@ import { useRouter } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { auth } from '../firebaseConfig'
-
-
+import { registerForPushNotificationsAsync,sendPushNotifications } from '@/services/notificationService'
 
 export default function SignUp() {
   const router = useRouter()
@@ -16,29 +15,37 @@ export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false)
+  const [loading,setLoading]=useState(false)
 
   // Signup function
-  const handleSignUp = () => {
+  const handleSignUp = async() => {
     if (!name.trim() || !email.trim() || !password.trim()) {
       Alert.alert('Error', 'Please fill in all the fields')
       return
     }
 
-    createUserWithEmailAndPassword(auth,email.trim(),password).then((userCredential)=>{
-      return updateProfile(userCredential.user,{
-        displayName:name.trim()
-      })
-    })
-    .then(()=>{
-      Alert.alert("Sucess",`Account created for ${name}`)
+    setLoading(true)
+    
+    try{
+      const userCredential=await createUserWithEmailAndPassword(auth,email.trim(),password)
+      await updateProfile(userCredential.user,{displayName:name.trim()})
+
+      //notification
+      const token=await registerForPushNotificationsAsync()
+      if(token){
+        await sendPushNotifications(token,'Welcome to the app',`Account successfully created for ${name.trim()}`)
+      }
       setPassword('')
-      setName('')
       setEmail('')
+      setName('')
       router.replace('/Login')
-    })
-    .catch((error)=>{
-      Alert.alert("Sign up Error", error.message)
-    })
+    }
+    catch(error:any){
+      Alert.alert('Sign up error',error.message)
+    }
+    finally{
+      setLoading(false)
+    }
   }
 
   return (
@@ -120,10 +127,15 @@ export default function SignUp() {
             {/* Signup button */}
             <View>
               <Pressable 
-                onPress={handleSignUp}
-                style={({ pressed }) => [styles.Signupbtn, pressed && { opacity: 0.6 }]}
+              onPress={handleSignUp}
+              disabled={loading}
+              style={({ pressed }) => [styles.Signupbtn, (pressed || loading) && { opacity: 0.7 }]}
               >
-                <Text style={styles.textbtn}>Sign Up</Text>
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.textbtn}>Sign Up</Text>
+                )}
               </Pressable>
             </View>
 
