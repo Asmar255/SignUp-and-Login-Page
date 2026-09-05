@@ -19,25 +19,26 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
 
   // Login function 
-  const handleLogin = () => {
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Please enter both email and password.')
-      return
+  async function handleLogin() {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password)
+    const userName = userCredential.user.displayName || userCredential.user.email
+    // Push Notification Logic
+    const token = await registerForPushNotificationsAsync()
+    if (token) {
+      await sendPushNotifications(token, 'Login Successful 🚀', `Welcome back, ${userName}!`)
     }
-
-    signInWithEmailAndPassword(auth,email.trim(),password).then((userCredential)=>{
-      const userName=userCredential.user.displayName || userCredential.user.email
-      Alert.alert(`Sucesss`, `Welcome Back, ${userName}`)
-      setEmail('')
-      setPassword('')
-    })
-    .catch((error)=>{
-      Alert.alert('Login Failed', error.message)
-      setEmail('')
-      setPassword('')
-    })
-    
+    setEmail('')
+    setPassword('')
+  } 
+  catch (error: any) {
+    Alert.alert('Login Failed', error.message)
+    setPassword('') // Only clear password on failure
   }
+  finally {
+    setLoading(false)
+  }
+}
 
   return (
     <SafeAreaView style={styles.container}>
