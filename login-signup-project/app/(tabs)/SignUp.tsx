@@ -5,7 +5,7 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../firebaseConfig'
+import { auth } from '../../services/firebaseConfig'
 import { registerForPushNotificationsAsync,sendPushNotifications } from '@/services/notificationService'
 
 export default function SignUp() {

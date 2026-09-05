@@ -4,7 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import { useState } from 'react'
-import { auth } from '../firebaseConfig'
+import { auth } from '../../services/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { registerForPushNotificationsAsync, sendPushNotifications } from '../../services/notificationService'
 
