@@ -19,6 +19,9 @@ A responsive, cross-platform authentication UI built with **React Native**, **Ex
 * **Expo Router Navigation:** Declarative file-based routing managing transitions between `/Login` and `/SignUp`.
 * **Keyboard & View Handling:** Optimized mobile layout preventing software keyboard overlap using screen context wrappers.
 * **Social Auth UI:** Styled touchable elements for Google and Apple single sign-on options.
+* **Task Reminders:** Scheduled local notifications for upcoming todo items and reminders.
+* **Android Channel Support:** Pre-configured high-priority notification channels for Android 8.0+.
+* **Permission Handling:** Built-in runtime permission requests and status handling.
 
 ---
 
@@ -29,6 +32,7 @@ A responsive, cross-platform authentication UI built with **React Native**, **Ex
 * **Language:** TypeScript
 * **Icons:** `@expo/vector-icons` (Feather, AntDesign)
 * **Layout:** `react-native-safe-area-context`
+* [`expo-notifications`](https://docs.expo.dev/versions/latest/sdk/notifications/) - Handles notification scheduling, permission management, and channel setup.
 
 ---
 
