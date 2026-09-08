@@ -11,6 +11,10 @@ const firebaseConfig = {
   measurementId: "G-FE31NKW9S0"
 };
 
+// Prevent re-initializing app during hot reloads
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-export const auth = getAuth(app);
+// Default auth initialization (in-memory)
+const auth = getAuth(app);
+
+export { auth };
