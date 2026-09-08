@@ -4,9 +4,9 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import { useState } from 'react'
-import { auth } from '../../services/firebaseConfig'
+import { auth } from '../services/firebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { registerForPushNotificationsAsync, sendPushNotifications } from '../../services/notificationService'
+import { registerForPushNotificationsAsync, sendPushNotifications } from '../services/notificationService'
 
 
 export default function Login() {
@@ -29,10 +29,11 @@ export default function Login() {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password)
     const userName = userCredential.user.displayName || userCredential.user.email
+
     // Push Notification Logic
-    const token = await registerForPushNotificationsAsync()
-    if (token) {
-      await sendPushNotifications(token, 'Login Successful 🚀', `Welcome back, ${userName}!`)
+    const hasPermission = await registerForPushNotificationsAsync();
+    if (hasPermission) {
+      await sendPushNotifications('Login Successful 🚀', `Welcome back, ${userName}!`);
     }
     setEmail('')
     setPassword('')

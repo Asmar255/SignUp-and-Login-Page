@@ -5,7 +5,7 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import { auth } from '../../services/firebaseConfig'
+import { auth } from '../services/firebaseConfig'
 import { registerForPushNotificationsAsync,sendPushNotifications } from '@/services/notificationService'
 
 export default function SignUp() {
@@ -31,9 +31,9 @@ export default function SignUp() {
       await updateProfile(userCredential.user,{displayName:name.trim()})
 
       //notification
-      const token=await registerForPushNotificationsAsync()
-      if(token){
-        await sendPushNotifications(token,'Welcome to the app',`Account successfully created for ${name.trim()}`)
+      const hasPermission = await registerForPushNotificationsAsync();
+      if (hasPermission) {
+        await sendPushNotifications('Welcome to the app', `Account successfully created for ${name.trim()}`);
       }
       setPassword('')
       setEmail('')

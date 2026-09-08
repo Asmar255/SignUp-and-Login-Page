@@ -2,53 +2,29 @@ import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 
-// Safely import expo-notifications without crashing Expo Go
 let Notifications: typeof import('expo-notifications') | null = null;
 const isExpoGo = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
 
-try {
-  if (!isExpoGo) {
+if (!isExpoGo) {
+  try {
     Notifications = require('expo-notifications');
-    
     Notifications?.setNotificationHandler({
       handleNotification: async () => ({
         shouldPlaySound: true,
         shouldSetBadge: false,
-        shouldShowBanner: true, 
-        shouldShowList: true,   
+        shouldShowBanner: true,
+        shouldShowList: true,
       }),
     });
+  } catch (e) {
+    console.warn("Notifications module skipped in Expo Go");
   }
-} catch (error) {
-  console.warn("expo-notifications native module is disabled in Expo Go on Android.");
 }
 
-// Request notification token
-export async function registerForPushNotificationsAsync(): Promise<string | undefined> {
+export async function registerForPushNotificationsAsync(): Promise<boolean> {
   if (isExpoGo || !Notifications) {
-    console.log("Push notifications require a Development Build (npx expo run:android). Skipping in Expo Go.");
-    return undefined;
-  }
-
-  let token: string | undefined;
-
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-
-    if (finalStatus !== 'granted') {
-      console.log("Permission not granted for notifications");
-      return undefined;
-    }
-    const pushTokenData = await Notifications.getExpoPushTokenAsync();
-    token = pushTokenData.data;
-  } else {
-    console.log("Push notifications require a physical device.");
+    console.log("Notifications disabled in Expo Go. Use a Development Build.");
+    return false;
   }
 
   if (Platform.OS === 'android') {
@@ -59,28 +35,33 @@ export async function registerForPushNotificationsAsync(): Promise<string | unde
       lightColor: '#FF236C',
     });
   }
-  return token;
+
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    return finalStatus === 'granted';
+  }
+  return false;
 }
 
-// Send notification
-export async function sendPushNotifications(expoPushToken: string, title: string, body: string) {
-  const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: title,
-    body: body,
-  };
+export async function sendPushNotifications(title: string, body: string) {
+  if (isExpoGo || !Notifications) {
+    console.log(`[Expo Go Simulation] Notification: ${title} - ${body}`);
+    return;
+  }
+
   try {
-    await fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
+    await Notifications.scheduleNotificationAsync({
+      content: { title, body, sound: 'default' },
+      trigger: null,
     });
   } catch (error) {
-    console.error('Error sending push notification:', error);
+    console.error('Error sending notification:', error);
   }
 }

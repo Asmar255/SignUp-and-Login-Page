@@ -1,6 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDjmnQKlrkga7UC0gPkWUFKTarB5fX4uaI",
@@ -12,10 +11,6 @@ const firebaseConfig = {
   measurementId: "G-FE31NKW9S0"
 };
 
-// Initialize Firebase app safely
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Auth with AsyncStorage persistence, casting storage to bypass TS definition mismatch
-export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage as any),
-});
+export const auth = getAuth(app);

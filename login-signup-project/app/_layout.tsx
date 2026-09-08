@@ -10,9 +10,11 @@ export default function RootLayout() {
   return (
     <>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="Login" options={{ title: 'Login', headerShown: false }} />
+      <Stack.Screen name="SignUp" options={{ title: 'Sign Up', headerShown: false }} />
+      <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    </Stack>
       <StatusBar style="auto" />
     </>
   );
